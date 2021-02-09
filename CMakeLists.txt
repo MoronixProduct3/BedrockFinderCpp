@@ -12,5 +12,4 @@ add_executable(${PROJECT_NAME}
 	PrecomputedRandAdvance.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCL_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${OpenCL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})

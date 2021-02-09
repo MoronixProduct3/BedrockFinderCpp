@@ -1,5 +1,4 @@
 #include "BFFGui.h"
-#include "GPUBedrockSearch.h"
 #include "BedrockSearch.h"
 #include "BedrockGen.h"
 #include <iostream>
@@ -89,7 +88,6 @@ BFFGui::BFFGui() :
 	context_choice_->SetSelection(0);
 
 	std::vector<std::string> gpus;
-	getGPUDevices(gpus);
 
 	wxArrayString device_strings;
 	device_strings.Add("CPU");
@@ -265,7 +263,6 @@ void BFFGui::onSearch(wxCommandEvent& evt)
 
 	if (device != "CPU")
 	{
-		current_search_ = std::thread(GPUSearch, std::string(context_choice_->GetStringSelection()), device, formation_, std::make_tuple(bounds[0], bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]), num_results);
 		return;
 	}
 

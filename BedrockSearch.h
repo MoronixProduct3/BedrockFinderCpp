@@ -13,7 +13,6 @@
 #include <chrono>
 
 
-
 using BedrockGenFunc = std::function<bool(int, int, int)>;
 //using EndSearchFunc = std::function<void(void)>;
 using Formation = std::map<std::tuple<int, int, int>, bool>;
@@ -27,6 +26,40 @@ bool matchFormation (const Formation& form, const BedrockGenFunc& func, int x, i
             return false;
     }
 
+    return true;
+}
+
+bool matchFormationRotate (const Formation& form, const BedrockGenFunc& func, int x, int y, int z)
+{
+    for (const auto& point : form)
+    {
+        if (point.second != func(std::get<0>(point.first) + x, std::get<1>(point.first) + y, std::get<2>(point.first) + z))
+            goto rotation1;
+    }
+    return true;
+
+rotation1:
+    for (const auto& point : form)
+    {
+        if (point.second != func(-std::get<2>(point.first) + x, std::get<1>(point.first) + y, std::get<0>(point.first) + z))
+            goto rotation2;
+    }
+    return true;
+
+rotation2:
+    for (const auto& point : form)
+    {
+        if (point.second != func(-std::get<0>(point.first) + x, std::get<1>(point.first) + y, -std::get<2>(point.first) + z))
+            goto rotation3;
+    }
+    return true;
+
+rotation3:
+    for (const auto& point : form)
+    {
+        if (point.second != func(std::get<2>(point.first) + x, std::get<1>(point.first) + y, -std::get<0>(point.first) + z))
+            return false;
+    }
     return true;
 }
 
@@ -53,7 +86,7 @@ void searchArea(Bounds bounds, Formation form, BedrockGenFunc func, std::atomic_
                 if (!(*cont) || (*num_results_left) < 0) return;
                 bool found = true;
 
-                found = matchFormation(form, func, x, y, z);
+                found = matchFormationRotate(form, func, x, y, z);
 
                 if (found)
                 {
